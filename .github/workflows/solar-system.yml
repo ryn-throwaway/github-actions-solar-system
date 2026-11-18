@@ -1,10 +1,10 @@
 name: Solar System Workflow
 
-
 env:
   MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
   MONGO_USERNAME: superuser
   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+
 on:
   workflow_dispatch:
   push:
@@ -37,3 +37,29 @@ jobs:
           with:
             name: Mocha-Test-Result
             path: test-results.xml
+            
+    code_coverage:
+       name: Code Coverage
+       runs-on: ubuntu-latest
+       steps:
+       - name: Checkout Repo
+         uses: actions/checkout@v4
+
+       - name: Setup NodeJS Version 
+         uses: actions/setup-node@v4
+         with:
+          node-version: 18
+        
+       - name: Install Dependencies
+         run: npm install
+
+       - name: Run Code Coverage
+         run: npm run code-coverage
+         continue-on-error: true
+
+       - name: archive coverage results
+         uses: actions/upload-artifact@v3
+         with: 
+           name: Code-Coverage-Result
+           path: coverage
+           retention-days: 5
