@@ -119,4 +119,4 @@ jobs:
           set -e
           echo "kubectl returned $?"
           kubectl -n default get pod
-          sleep 10a
+          sleep 10
